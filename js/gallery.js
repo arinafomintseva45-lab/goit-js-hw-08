@@ -63,32 +63,25 @@ const images = [
     description: 'Lighthouse Coast Sea',
   },
 ];
-const gallery = document.querySelector('.gallery');
-const galleryMarkup = images
-  .map(({ preview, original, description }) => {
-    return `
-      <li class="gallery-item">
-        <a class="gallery-link" href="${original}">
-          <img class="gallery-image" src="${preview}" data-source="${original}" alt="${description}" />
-        </a>
-      </li>
-    `;
-  })
+const galleryContainer = document.querySelector('.gallery');
+
+const cardsHTML = images
+  .map(({ preview, original, description }) => `
+    <li class="gallery-item">
+      <a class="gallery-link" href="${original}">
+        <img class="gallery-image" src="${preview}" data-source="${original}" alt="${description}">
+      </a>
+    </li>
+  `)
   .join('');
 
-gallery.innerHTML = galleryMarkup;
-gallery.addEventListener('click', (event) => {
-  event.preventDefault(); 
-  const target = event.target;
+galleryContainer.innerHTML = cardsHTML;
 
-  if (target.nodeName !== 'IMG') return; 
+galleryContainer.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (e.target.nodeName !== 'IMG') return;
 
-  const largeImageURL = target.dataset.source;
-
-
-  const instance = basicLightbox.create(`
-    <img src="${largeImageURL}" width="800" height="600">
-  `);
-
-  instance.show();
+  const bigImg = e.target.dataset.source;
+  const modal = basicLightbox.create(`<img src="${bigImg}" width="800" height="600">`);
+  modal.show();
 });
